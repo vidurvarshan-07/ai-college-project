@@ -94,7 +94,15 @@ export default function CalculationConsole({
           <div>
             <div className="calc-title">ALGORITHM CALCULATION ENGINE & LIVE MATH DISPLAY</div>
             <div className="calc-subtitle">
-              Evaluating formula <code>f(n) = g(n) + h(n)</code> in real-time as robot moves towards fixed destination
+              {selectedAlgo === 'astar' && (
+                <>Evaluating formula <code>f(n) = g(n) + h(n)</code> with admissible heuristic in real-time</>
+              )}
+              {selectedAlgo === 'bfs' && (
+                <>Level-order expansion via FIFO Queue (unweighted minimum hop count)</>
+              )}
+              {selectedAlgo === 'dfs' && (
+                <>Deep-branch exploration via LIFO Stack (exhaustive depth traversal)</>
+              )}
             </div>
           </div>
         </div>
@@ -107,7 +115,7 @@ export default function CalculationConsole({
 
           <div className="badge-algo-mode">
             <Activity size={13} />
-            <span>Algorithm: <strong>A* SEARCH</strong></span>
+            <span>Algorithm: <strong>{selectedAlgo === 'astar' ? 'A* SEARCH' : selectedAlgo === 'bfs' ? 'BFS (QUEUE)' : 'DFS (STACK)'}</strong></span>
           </div>
         </div>
       </div>

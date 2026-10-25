@@ -16,8 +16,8 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
           <div className="modal-title-wrap">
             <BarChart3 className="modal-icon" size={22} />
             <div>
-              <h3>A* Search Heuristics Benchmark</h3>
-              <p className="modal-subtitle">Evaluating A* Performance across Different Heuristic Functions on Current Campus</p>
+              <h3>Algorithm Benchmark: A* vs BFS vs DFS</h3>
+              <p className="modal-subtitle">Direct performance comparison between Informed Heuristic, Breadth-First, and Depth-First Search</p>
             </div>
           </div>
           <button className="modal-close-btn" onClick={onClose} id="btn-close-benchmark">
@@ -30,13 +30,13 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
             <table className="benchmark-table" id="benchmark-table">
               <thead>
                 <tr>
-                  <th>A* Variant / Heuristic</th>
+                  <th>Algorithm</th>
                   <th>Optimality</th>
                   <th>Nodes Explored</th>
                   <th>Path Cost (Weighted)</th>
                   <th>Path Steps</th>
                   <th>Runtime (ms)</th>
-                  <th>Apply</th>
+                  <th>Select</th>
                 </tr>
               </thead>
               <tbody>
@@ -51,14 +51,18 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
                         <div className="algo-cell-title">
                           <strong>{res.algorithm}</strong>
                           {isBestNodes && isBestCost && (
-                            <span className="winner-badge" title="Overall Most Efficient Heuristic">
-                              <Award size={12} /> Most Efficient
+                            <span className="winner-badge" title="Overall Most Efficient">
+                              <Award size={12} /> Best
                             </span>
                           )}
                         </div>
                       </td>
                       <td>
-                        <span className="badge-optimal"><CheckCircle size={12} /> Guaranteed Optimal</span>
+                        {res.isOptimal ? (
+                          <span className="badge-optimal"><CheckCircle size={12} /> Guaranteed Optimal</span>
+                        ) : (
+                          <span className="badge-suboptimal"><AlertCircle size={12} /> Suboptimal (Unweighted)</span>
+                        )}
                       </td>
                       <td>
                         <div className="metric-cell">
@@ -69,7 +73,7 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
                       <td>
                         <div className="metric-cell">
                           <span className={isBestCost ? 'best-val' : ''}>{res.pathCost}</span>
-                          {isBestCost && <span className="mini-tag">Optimal</span>}
+                          {isBestCost && <span className="mini-tag">Shortest</span>}
                         </div>
                       </td>
                       <td>
@@ -87,7 +91,7 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
                           }}
                           id={`btn-run-from-table-${res.id}`}
                         >
-                          Use Heuristic
+                          Visualize
                         </button>
                       </td>
                     </tr>
@@ -98,12 +102,11 @@ export default function AlgorithmComparison({ results, onClose, onSelectAndRun }
           </div>
 
           <div className="insights-box">
-            <h4><Award size={16} /> A* Heuristic Mathematical Insights:</h4>
+            <h4><Award size={16} /> Key Theoretical Takeaways:</h4>
             <ul>
-              <li><strong>Admissibility Guarantee:</strong> When the heuristic never overestimates actual distance to the goal (h(n) &le; h*(n)), A* is guaranteed to produce an optimal path.</li>
-              <li><strong>Manhattan Distance:</strong> Ideal for 4-directional grid layouts (|&Delta;r| + |&Delta;c|), driving the frontier directly along campus walkways.</li>
-              <li><strong>Octile Distance:</strong> Optimized for 8-directional movement with diagonal moves (cost &radic;2), preventing diagonal overestimation.</li>
-              <li><strong>h(n) = 0 Baseline:</strong> Without heuristic direction, A* devolves into uniform-cost exploration, expanding exponentially more nodes and proving why A*'s heuristic makes it far superior.</li>
+              <li><strong>A* Search:</strong> Uses heuristic guidance <code>f(n) = g(n) + h(n)</code> to guarantee the lowest weighted cost while pruning search space.</li>
+              <li><strong>Breadth-First Search (BFS):</strong> Explores radially layer-by-layer. Guarantees the fewest number of tile hops, but ignores terrain penalties (lawns vs paved paths).</li>
+              <li><strong>Depth-First Search (DFS):</strong> Dives deeply into paths before backtracking. Highly unpredictable and typically yields convoluted, non-optimal paths.</li>
             </ul>
           </div>
         </div>

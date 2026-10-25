@@ -35,25 +35,29 @@ export default function AlgorithmGuideModal({ onClose }) {
           </section>
 
           <section className="guide-section">
-            <h4><Compass size={18} className="section-icon" /> 2. Admissibility & Optimality Guarantee</h4>
+            <h4><Compass size={18} className="section-icon" /> 2. Breadth-First Search (BFS)</h4>
             <p>
-              An A* heuristic is <strong>admissible</strong> if it never overestimates the actual distance to the goal:
+              BFS explores the campus graph layer-by-layer expanding outward radially using a <strong>First-In, First-Out (FIFO) queue</strong>.
             </p>
             <div className="math-callout">
-              <strong>0 &le; h(n) &le; h*(n)</strong>
+              <strong>Unweighted Shortest Path</strong>
+              <ul>
+                <li>Guarantees the minimum number of step hops on unweighted graphs.</li>
+                <li><strong>Limitation:</strong> Unaware of terrain weights (e.g. treats grass lawns and muddy stairs identically to open paved roads).</li>
+              </ul>
             </div>
-            <p>
-              Because our heuristics (Manhattan, Euclidean, Octile) never overestimate the straight-line distance, A* is mathematically guaranteed to find the absolute shortest path while expanding the minimum necessary nodes.
-            </p>
           </section>
 
           <section className="guide-section">
-            <h4><Zap size={18} className="section-icon" /> 3. Campus Heuristic Strategies</h4>
+            <h4><Zap size={18} className="section-icon" /> 3. Depth-First Search (DFS)</h4>
+            <p>
+              DFS explores as deeply as possible along each branch before backtracking, utilizing a <strong>Last-In, First-Out (LIFO) stack</strong>.
+            </p>
             <div className="math-callout">
+              <strong>Deep Path Exploration</strong>
               <ul>
-                <li><strong>Manhattan Distance:</strong> <code>h(n) = |&Delta;r| + |&Delta;c|</code>. Optimal for standard 4-directional grid walkways where diagonal movement is constrained.</li>
-                <li><strong>Euclidean Distance:</strong> <code>h(n) = &radic;((&Delta;r)&sup2; + (&Delta;c)&sup2;)</code>. Straight-line distance; provides smooth, direct vector orientation.</li>
-                <li><strong>Octile Distance:</strong> <code>h(n) = &Delta;r + &Delta;c + (&radic;2 - 2)&middot;min(&Delta;r, &Delta;c)</code>. The ideal admissible heuristic when 8-directional diagonal movement is enabled.</li>
+                <li>Memory-efficient, but does not guarantee the shortest path or optimal cost.</li>
+                <li>Frequently produces winding, convoluted detours around campus buildings.</li>
               </ul>
             </div>
           </section>
@@ -64,7 +68,7 @@ export default function AlgorithmGuideModal({ onClose }) {
               In real-world university campuses, unexpected obstacles (construction roadblocks, delivery carts, crowds) suddenly appear.
             </p>
             <p>
-              This simulator equips the rover with simulated 360&deg; LiDAR sensors. Clicking <strong>"Inject Sudden Roadblock"</strong> simulates an unexpected obstacle detection: the rover instantly halts, marks the blockage, and recalculates an alternate optimal A* trajectory on the fly!
+              This simulator equips the rover with simulated 360&deg; LiDAR sensors. Clicking <strong>"Inject Sudden Roadblock"</strong> simulates an unexpected obstacle detection: the rover instantly halts, marks the blockage, and recalculates an alternate optimal trajectory on the fly!
             </p>
           </section>
         </div>

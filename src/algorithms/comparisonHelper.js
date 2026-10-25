@@ -1,30 +1,13 @@
-// A* Search Heuristics Comparison Helper
+// Comparison Helper for A*, BFS, and DFS
 import { runAStar } from './astar.js';
-import { manhattan, euclidean, octile } from './heuristics.js';
+import { runBFS } from './bfs.js';
+import { runDFS } from './dfs.js';
 
-export function runAllAlgorithms(grid, start, goal, _activeHeuristic, allowDiagonal = false) {
-  const zeroHeuristic = () => 0;
+export function runAllAlgorithms(grid, start, goal, activeHeuristicFn, allowDiagonal = false) {
+  const resAStar = runAStar(grid, start, goal, activeHeuristicFn, allowDiagonal);
+  const resBFS = runBFS(grid, start, goal, allowDiagonal);
+  const resDFS = runDFS(grid, start, goal, allowDiagonal);
 
-  const resManhattan = runAStar(grid, start, goal, manhattan, allowDiagonal);
-  resManhattan.algorithm = 'A* (Manhattan Distance)';
-  resManhattan.id = 'astar-manhattan';
-  resManhattan.heuristicName = 'Manhattan';
-
-  const resEuclidean = runAStar(grid, start, goal, euclidean, allowDiagonal);
-  resEuclidean.algorithm = 'A* (Euclidean Distance)';
-  resEuclidean.id = 'astar-euclidean';
-  resEuclidean.heuristicName = 'Euclidean';
-
-  const resOctile = runAStar(grid, start, goal, octile, allowDiagonal);
-  resOctile.algorithm = 'A* (Octile Diagonal)';
-  resOctile.id = 'astar-octile';
-  resOctile.heuristicName = 'Octile';
-
-  const resZero = runAStar(grid, start, goal, zeroHeuristic, allowDiagonal);
-  resZero.algorithm = 'A* with h(n)=0 (Dijkstra Baseline)';
-  resZero.id = 'astar-zero';
-  resZero.heuristicName = 'Zero Heuristic';
-
-  return [resManhattan, resEuclidean, resOctile, resZero];
+  return [resAStar, resBFS, resDFS];
 }
 

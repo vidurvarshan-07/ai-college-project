@@ -22,6 +22,8 @@ import { CAMPUS_BUILDINGS } from './constants/campusBuildings.js';
 import { CAMPUS_MISSIONS } from './constants/missions.js';
 
 import { runAStar } from './algorithms/astar.js';
+import { runBFS } from './algorithms/bfs.js';
+import { runDFS } from './algorithms/dfs.js';
 import { manhattan, euclidean, octile } from './algorithms/heuristics.js';
 import { runAllAlgorithms } from './algorithms/comparisonHelper.js';
 import { generateRecursiveDivision } from './algorithms/mazeGenerator.js';
@@ -158,11 +160,19 @@ export default function App() {
     }
   }, [heuristic]);
 
-  // Execute single A-to-B Search Algorithm (A* Algorithm)
+  // Execute single A-to-B Search Algorithm (A*, BFS, DFS)
   const executeSearch = useCallback((startNode, goalNode, currentGrid) => {
     const hFn = getHeuristicFn();
-    return runAStar(currentGrid, startNode, goalNode, hFn, allowDiagonal);
-  }, [getHeuristicFn, allowDiagonal]);
+    switch (selectedAlgo) {
+      case 'bfs':
+        return runBFS(currentGrid, startNode, goalNode, allowDiagonal);
+      case 'dfs':
+        return runDFS(currentGrid, startNode, goalNode, allowDiagonal);
+      case 'astar':
+      default:
+        return runAStar(currentGrid, startNode, goalNode, hFn, allowDiagonal);
+    }
+  }, [getHeuristicFn, selectedAlgo, allowDiagonal]);
 
   // Fast Full Path Calculation (with Waypoint support)
   const calculatePath = useCallback((customGrid, customStart, customGoal, customWaypoints) => {
@@ -742,6 +752,11 @@ export default function App() {
       <Header
         selectedMission={selectedMission}
         onSelectMission={handleSelectMission}
+        selectedAlgo={selectedAlgo}
+        onSelectAlgo={(algo) => {
+          setSelectedAlgo(algo);
+          runLiveAutoplan(grid, start, goal, waypoints);
+        }}
         heuristic={heuristic}
         onSelectHeuristic={(h) => {
           setHeuristic(h);
@@ -875,10 +890,8 @@ export default function App() {
         <AlgorithmComparison
           results={benchmarkResults}
           onClose={() => setIsBenchmarkModalOpen(false)}
-          onSelectAndRun={(resId) => {
-            if (resId === 'astar-manhattan') setHeuristic('manhattan');
-            else if (resId === 'astar-euclidean') setHeuristic('euclidean');
-            else if (resId === 'astar-octile') setHeuristic('octile');
+          onSelectAndRun={(algoId) => {
+            setSelectedAlgo(algoId);
             runLiveAutoplan(grid, start, goal, waypoints);
           }}
         />

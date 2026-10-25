@@ -266,19 +266,21 @@ export default function ControlPanel({
           </div>
         </div>
 
-        <div className="setting-group">
-          <span className="setting-label"><Compass size={13} /> A* Heuristic:</span>
-          <select
-            className="custom-select"
-            value={heuristic}
-            onChange={e => onSelectHeuristic(e.target.value)}
-            id="select-heuristic"
-          >
-            {heuristics.map(h => (
-              <option key={h.id} value={h.id}>{h.label}</option>
-            ))}
-          </select>
-        </div>
+        {selectedAlgo === 'astar' && (
+          <div className="setting-group">
+            <span className="setting-label"><Compass size={13} /> A* Heuristic:</span>
+            <select
+              className="custom-select"
+              value={heuristic}
+              onChange={e => onSelectHeuristic(e.target.value)}
+              id="select-heuristic"
+            >
+              {heuristics.map(h => (
+                <option key={h.id} value={h.id}>{h.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="setting-group diagonal-group">
           <label className="checkbox-toggle" id="toggle-diagonal-wrap">

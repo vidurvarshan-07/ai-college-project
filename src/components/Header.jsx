@@ -5,6 +5,8 @@ import { CAMPUS_MISSIONS } from '../constants/missions.js';
 export default function Header({
   selectedMission,
   onSelectMission,
+  selectedAlgo = 'astar',
+  onSelectAlgo,
   heuristic = 'manhattan',
   onSelectHeuristic,
   onOpenBenchmark,
@@ -12,10 +14,16 @@ export default function Header({
   isMuted,
   onToggleMute
 }) {
+  const algorithms = [
+    { id: 'astar', label: 'A* Search', badge: 'f(n) = g + h', desc: 'Optimal & Informed' },
+    { id: 'bfs', label: 'BFS', badge: 'Queue (FIFO)', desc: 'Fewest Step Hops' },
+    { id: 'dfs', label: 'DFS', badge: 'Stack (LIFO)', desc: 'Deep Exploration' }
+  ];
+
   const heuristics = [
-    { id: 'manhattan', label: 'Manhattan', formula: '|Δr| + |Δc|', badge: 'Standard L1' },
-    { id: 'euclidean', label: 'Euclidean', formula: '√(Δr² + Δc²)', badge: 'Direct Line' },
-    { id: 'octile', label: 'Octile', formula: 'Diagonal Metric', badge: '8-Dir Grid' }
+    { id: 'manhattan', label: 'Manhattan', formula: '|Δr| + |Δc|' },
+    { id: 'euclidean', label: 'Euclidean', formula: '√(Δr² + Δc²)' },
+    { id: 'octile', label: 'Octile', formula: 'Diagonal Metric' }
   ];
 
   return (
@@ -27,7 +35,7 @@ export default function Header({
           </div>
           <div className="brand-text">
             <div className="brand-title">CAMPUS AUTO-NAV</div>
-            <div className="brand-subtitle">AI College Automaton A* Pathfinding Simulator</div>
+            <div className="brand-subtitle">AI College Automaton Pathfinding Simulator (A*, BFS, DFS)</div>
           </div>
         </div>
 
@@ -36,20 +44,20 @@ export default function Header({
             className="action-pill-btn benchmark-btn"
             onClick={onOpenBenchmark}
             id="btn-open-benchmark"
-            title="Compare A* heuristics side-by-side"
+            title="Compare A*, BFS, and DFS side-by-side"
           >
             <BarChart2 size={16} />
-            <span>A* Heuristics Benchmark</span>
+            <span>Compare Algorithms</span>
           </button>
 
           <button
             className="action-pill-btn guide-btn"
             onClick={onOpenGuide}
             id="btn-open-guide"
-            title="Read A* mathematical theory & formula guide"
+            title="Read algorithm theory and comparisons"
           >
             <BookOpen size={16} />
-            <span>A* Guide</span>
+            <span>Algorithm Guide</span>
           </button>
 
           <button
@@ -86,29 +94,41 @@ export default function Header({
 
         {/* Algorithm & Heuristic Bar */}
         <div className="algo-selector-pills" id="algo-pills-container">
-          <div className="active-algo-tag-group">
-            <span className="control-label"><Navigation size={14} /> Algorithm:</span>
-            <div className="algo-badge-main">
-              <strong>A* Search</strong>
-              <span className="algo-code-pill">f(n) = g(n) + h(n)</span>
-            </div>
-          </div>
-
-          <span className="control-label" style={{ marginLeft: 8 }}><Sparkles size={14} /> Heuristic h(n):</span>
+          <span className="control-label"><Navigation size={14} /> Algorithm:</span>
           <div className="pills-track">
-            {heuristics.map(h => (
+            {algorithms.map(algo => (
               <button
-                key={h.id}
-                className={`algo-pill-btn ${heuristic === h.id ? 'active' : ''}`}
-                onClick={() => onSelectHeuristic?.(h.id)}
-                id={`btn-heuristic-${h.id}`}
-                title={`Heuristic formula: ${h.formula}`}
+                key={algo.id}
+                className={`algo-pill-btn ${selectedAlgo === algo.id ? 'active' : ''}`}
+                onClick={() => onSelectAlgo(algo.id)}
+                id={`btn-algo-${algo.id}`}
+                title={algo.desc}
               >
-                <span className="algo-name">{h.label}</span>
-                <span className="algo-badge">{h.badge}</span>
+                <span className="algo-name">{algo.label}</span>
+                <span className="algo-badge">{algo.badge}</span>
               </button>
             ))}
           </div>
+
+          {selectedAlgo === 'astar' && (
+            <div className="active-algo-tag-group" style={{ marginLeft: 8 }}>
+              <span className="control-label"><Sparkles size={14} /> Heuristic:</span>
+              <div className="pills-track">
+                {heuristics.map(h => (
+                  <button
+                    key={h.id}
+                    className={`algo-pill-btn ${heuristic === h.id ? 'active' : ''}`}
+                    onClick={() => onSelectHeuristic?.(h.id)}
+                    id={`btn-heuristic-${h.id}`}
+                    title={`Heuristic formula: ${h.formula}`}
+                  >
+                    <span className="algo-name">{h.label}</span>
+                    <span className="algo-badge">{h.formula}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

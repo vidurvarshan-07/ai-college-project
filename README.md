@@ -4,13 +4,12 @@ An interactive, high-fidelity AI Pathfinding Simulator modeled for autonomous ca
 
 ---
 
-## 🌟 Features
-
-- **Core A\* Search Engine**:
-  - Evaluates **f(n) = g(n) + h(n)** in real-time with mathematical guarantees of shortest-path optimality.
-  - **Multiple Admissible Heuristics**: Manhattan Distance (|Δr| + |Δc|), Euclidean Straight-Line, and Octile 8-Directional Diagonal metric.
-  - **A\* Heuristics Benchmark**: Side-by-side performance matrix comparing heuristic exploration space vs. uniform-cost baseline.
-  - **Dynamic A\* Replanning**: Real-time obstacle avoidance when new roadblocks appear during rover traversal.
+- **Algorithms Engine (A\*, BFS, DFS)**:
+  - **A\* Search**: Evaluates **f(n) = g(n) + h(n)** in real-time with admissible heuristics (Manhattan, Euclidean, Octile) and optimal weighted terrain traversal.
+  - **Breadth-First Search (BFS)**: Unweighted shortest-hop exploration via FIFO queue.
+  - **Depth-First Search (DFS)**: Deep branch exploration via LIFO stack.
+  - **Comparative Benchmark**: Side-by-side matrix comparing A*, BFS, and DFS runtime, nodes visited, and optimality.
+  - **Dynamic Obstacle Replanning**: Real-time obstacle avoidance when new roadblocks appear during rover traversal.
 - **Live Campus Blueprint**:
   - Modeled university buildings (AI Research Lab, Student Union, Tech Incubator, Robotics Foundry, Central Library, Quantum Computing Center, Cafeteria, etc.)
   - Interactive doors, campus terrain weights (Paved paths, Grass/Mud mud-traps, Heavy Traffic corridors)
