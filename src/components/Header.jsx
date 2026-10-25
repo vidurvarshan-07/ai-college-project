@@ -5,20 +5,17 @@ import { CAMPUS_MISSIONS } from '../constants/missions.js';
 export default function Header({
   selectedMission,
   onSelectMission,
-  selectedAlgo,
-  onSelectAlgo,
+  heuristic = 'manhattan',
+  onSelectHeuristic,
   onOpenBenchmark,
   onOpenGuide,
   isMuted,
   onToggleMute
 }) {
-  const algorithms = [
-    { id: 'astar', label: 'A* Search', badge: 'Optimal & Fast' },
-    { id: 'dijkstra', label: "Dijkstra's", badge: 'Optimal Weighted' },
-    { id: 'bfs', label: 'BFS', badge: 'Unweighted' },
-    { id: 'greedy', label: 'Greedy Best-First', badge: 'Heuristic-Only' },
-    { id: 'bidirectional', label: 'Bi-Directional A*', badge: 'Dual Frontier' },
-    { id: 'dfs', label: 'DFS', badge: 'Exhaustive' }
+  const heuristics = [
+    { id: 'manhattan', label: 'Manhattan', formula: '|Δr| + |Δc|', badge: 'Standard L1' },
+    { id: 'euclidean', label: 'Euclidean', formula: '√(Δr² + Δc²)', badge: 'Direct Line' },
+    { id: 'octile', label: 'Octile', formula: 'Diagonal Metric', badge: '8-Dir Grid' }
   ];
 
   return (
@@ -30,7 +27,7 @@ export default function Header({
           </div>
           <div className="brand-text">
             <div className="brand-title">CAMPUS AUTO-NAV</div>
-            <div className="brand-subtitle">AI College Automaton Navigation & Pathfinding Simulator</div>
+            <div className="brand-subtitle">AI College Automaton A* Pathfinding Simulator</div>
           </div>
         </div>
 
@@ -39,20 +36,20 @@ export default function Header({
             className="action-pill-btn benchmark-btn"
             onClick={onOpenBenchmark}
             id="btn-open-benchmark"
-            title="Compare all 5 algorithms side-by-side"
+            title="Compare A* heuristics side-by-side"
           >
             <BarChart2 size={16} />
-            <span>Compare Algorithms</span>
+            <span>A* Heuristics Benchmark</span>
           </button>
 
           <button
             className="action-pill-btn guide-btn"
             onClick={onOpenGuide}
             id="btn-open-guide"
-            title="Read algorithm explanation & instructions"
+            title="Read A* mathematical theory & formula guide"
           >
             <BookOpen size={16} />
-            <span>Algorithm Guide</span>
+            <span>A* Guide</span>
           </button>
 
           <button
@@ -87,19 +84,28 @@ export default function Header({
           </select>
         </div>
 
-        {/* Algorithm Pills */}
+        {/* Algorithm & Heuristic Bar */}
         <div className="algo-selector-pills" id="algo-pills-container">
-          <span className="control-label"><Navigation size={14} /> Algorithm:</span>
+          <div className="active-algo-tag-group">
+            <span className="control-label"><Navigation size={14} /> Algorithm:</span>
+            <div className="algo-badge-main">
+              <strong>A* Search</strong>
+              <span className="algo-code-pill">f(n) = g(n) + h(n)</span>
+            </div>
+          </div>
+
+          <span className="control-label" style={{ marginLeft: 8 }}><Sparkles size={14} /> Heuristic h(n):</span>
           <div className="pills-track">
-            {algorithms.map(algo => (
+            {heuristics.map(h => (
               <button
-                key={algo.id}
-                className={`algo-pill-btn ${selectedAlgo === algo.id ? 'active' : ''}`}
-                onClick={() => onSelectAlgo(algo.id)}
-                id={`btn-algo-${algo.id}`}
+                key={h.id}
+                className={`algo-pill-btn ${heuristic === h.id ? 'active' : ''}`}
+                onClick={() => onSelectHeuristic?.(h.id)}
+                id={`btn-heuristic-${h.id}`}
+                title={`Heuristic formula: ${h.formula}`}
               >
-                <span className="algo-name">{algo.label}</span>
-                <span className="algo-badge">{algo.badge}</span>
+                <span className="algo-name">{h.label}</span>
+                <span className="algo-badge">{h.badge}</span>
               </button>
             ))}
           </div>

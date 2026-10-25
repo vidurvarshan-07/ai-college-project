@@ -107,7 +107,7 @@ export default function CalculationConsole({
 
           <div className="badge-algo-mode">
             <Activity size={13} />
-            <span>Algorithm: <strong>{selectedAlgo.toUpperCase()}</strong></span>
+            <span>Algorithm: <strong>A* SEARCH</strong></span>
           </div>
         </div>
       </div>

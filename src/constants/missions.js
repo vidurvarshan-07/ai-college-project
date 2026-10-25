@@ -22,8 +22,8 @@ export const CAMPUS_MISSIONS = [
     startBuilding: 'Health & Medical Center',
     goalBuilding: 'Olympic Gymnasium & Sports Complex',
     description: 'A sports arena student needs urgent automated first-aid. Deliver an AED unit across the campus through the quad lawn.',
-    recommendedAlgo: 'dijkstra',
-    tip: 'Dijkstra accounts for the higher terrain cost of lawn (3x) vs paved walkways (1x).'
+    recommendedAlgo: 'astar',
+    tip: 'A* evaluates terrain weights (3x lawn vs 1x paved) while remaining guided by the heuristic.'
   },
   {
     id: 'night-book-return',
@@ -35,8 +35,8 @@ export const CAMPUS_MISSIONS = [
     startBuilding: 'East Residential Towers & Dorms',
     goalBuilding: 'Ada Lovelace Central Library',
     description: 'Return heavy robotics textbooks from dormitories to the Central Library before midnight closing.',
-    recommendedAlgo: 'bidirectional',
-    tip: 'Bi-directional search meets halfway between Dorms and Library in half the expansions.'
+    recommendedAlgo: 'astar',
+    tip: 'A* with Euclidean heuristic finds the shortest straight line across open campus corridors.'
   },
   {
     id: 'vip-tour',

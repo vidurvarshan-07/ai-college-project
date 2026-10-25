@@ -22,11 +22,6 @@ import { CAMPUS_BUILDINGS } from './constants/campusBuildings.js';
 import { CAMPUS_MISSIONS } from './constants/missions.js';
 
 import { runAStar } from './algorithms/astar.js';
-import { runDijkstra } from './algorithms/dijkstra.js';
-import { runBFS } from './algorithms/bfs.js';
-import { runGreedyBestFirst } from './algorithms/greedy.js';
-import { runBidirectionalAStar } from './algorithms/bidirectional.js';
-import { runDFS } from './algorithms/dfs.js';
 import { manhattan, euclidean, octile } from './algorithms/heuristics.js';
 import { runAllAlgorithms } from './algorithms/comparisonHelper.js';
 import { generateRecursiveDivision } from './algorithms/mazeGenerator.js';
@@ -163,25 +158,11 @@ export default function App() {
     }
   }, [heuristic]);
 
-  // Execute single A-to-B Search Algorithm
+  // Execute single A-to-B Search Algorithm (A* Algorithm)
   const executeSearch = useCallback((startNode, goalNode, currentGrid) => {
     const hFn = getHeuristicFn();
-    switch (selectedAlgo) {
-      case 'dijkstra':
-        return runDijkstra(currentGrid, startNode, goalNode, allowDiagonal);
-      case 'bfs':
-        return runBFS(currentGrid, startNode, goalNode, allowDiagonal);
-      case 'greedy':
-        return runGreedyBestFirst(currentGrid, startNode, goalNode, hFn, allowDiagonal);
-      case 'bidirectional':
-        return runBidirectionalAStar(currentGrid, startNode, goalNode, hFn, allowDiagonal);
-      case 'dfs':
-        return runDFS(currentGrid, startNode, goalNode, allowDiagonal);
-      case 'astar':
-      default:
-        return runAStar(currentGrid, startNode, goalNode, hFn, allowDiagonal);
-    }
-  }, [getHeuristicFn, selectedAlgo, allowDiagonal]);
+    return runAStar(currentGrid, startNode, goalNode, hFn, allowDiagonal);
+  }, [getHeuristicFn, allowDiagonal]);
 
   // Fast Full Path Calculation (with Waypoint support)
   const calculatePath = useCallback((customGrid, customStart, customGoal, customWaypoints) => {
@@ -761,9 +742,9 @@ export default function App() {
       <Header
         selectedMission={selectedMission}
         onSelectMission={handleSelectMission}
-        selectedAlgo={selectedAlgo}
-        onSelectAlgo={(algo) => {
-          setSelectedAlgo(algo);
+        heuristic={heuristic}
+        onSelectHeuristic={(h) => {
+          setHeuristic(h);
           runLiveAutoplan(grid, start, goal, waypoints);
         }}
         onOpenBenchmark={handleOpenBenchmark}
@@ -894,8 +875,10 @@ export default function App() {
         <AlgorithmComparison
           results={benchmarkResults}
           onClose={() => setIsBenchmarkModalOpen(false)}
-          onSelectAndRun={(algoId) => {
-            setSelectedAlgo(algoId);
+          onSelectAndRun={(resId) => {
+            if (resId === 'astar-manhattan') setHeuristic('manhattan');
+            else if (resId === 'astar-euclidean') setHeuristic('euclidean');
+            else if (resId === 'astar-octile') setHeuristic('octile');
             runLiveAutoplan(grid, start, goal, waypoints);
           }}
         />

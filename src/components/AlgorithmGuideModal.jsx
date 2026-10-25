@@ -20,58 +20,51 @@ export default function AlgorithmGuideModal({ onClose }) {
 
         <div className="modal-body guide-content">
           <section className="guide-section">
-            <h4><Navigation size={18} className="section-icon" /> 1. A* (A-Star) Search Algorithm</h4>
+            <h4><Navigation size={18} className="section-icon" /> 1. The A* (A-Star) Evaluation Function</h4>
             <p>
-              A* is the industry standard for autonomous robotics and game AI pathfinding. It evaluates each candidate node using the formula:
+              A* is the benchmark algorithm for autonomous ground vehicles and robotics. At each step, it selects the node from the open frontier with the lowest estimated total cost:
             </p>
             <div className="math-callout">
               <strong>f(n) = g(n) + h(n)</strong>
               <ul>
-                <li><code>g(n)</code>: The actual exact cost accumulated from the start node to node <em>n</em> (including terrain friction like grass, stairs, crowds).</li>
-                <li><code>h(n)</code>: The heuristic estimate of the remaining cost from node <em>n</em> to the goal.</li>
-                <li><code>f(n)</code>: The total estimated path cost going through node <em>n</em>.</li>
+                <li><code>g(n)</code>: The exact accumulated cost to travel from the start position to current tile <em>n</em> (factoring in terrain friction like walkways: 1x, lawns: 3x, stairwells: 7x).</li>
+                <li><code>h(n)</code>: The admissible heuristic estimate of the remaining cost from node <em>n</em> directly to the target goal.</li>
+                <li><code>f(n)</code>: The total estimated cost of the cheapest path through node <em>n</em> to the destination.</li>
               </ul>
             </div>
+          </section>
+
+          <section className="guide-section">
+            <h4><Compass size={18} className="section-icon" /> 2. Admissibility & Optimality Guarantee</h4>
             <p>
-              <strong>Why it excels:</strong> If the heuristic is <em>admissible</em> (never overestimates the true distance, e.g., Manhattan or Euclidean distance), A* is mathematically guaranteed to return the optimal shortest path while expanding far fewer nodes than blind searches.
+              An A* heuristic is <strong>admissible</strong> if it never overestimates the actual distance to the goal:
+            </p>
+            <div className="math-callout">
+              <strong>0 &le; h(n) &le; h*(n)</strong>
+            </div>
+            <p>
+              Because our heuristics (Manhattan, Euclidean, Octile) never overestimate the straight-line distance, A* is mathematically guaranteed to find the absolute shortest path while expanding the minimum necessary nodes.
             </p>
           </section>
 
           <section className="guide-section">
-            <h4><Zap size={18} className="section-icon" /> 2. Dijkstra's Algorithm</h4>
-            <p>
-              Dijkstra is equivalent to A* with <code>h(n) = 0</code>. It always expands the node with the lowest cumulative cost <code>g(n)</code>.
-            </p>
-            <p>
-              <strong>When to use:</strong> Ideal when you need to calculate paths to multiple destinations simultaneously, or when no reliable heuristic exists. However, for point-to-point campus navigation, it wastes computation exploring outward in concentric circles away from the target.
-            </p>
+            <h4><Zap size={18} className="section-icon" /> 3. Campus Heuristic Strategies</h4>
+            <div className="math-callout">
+              <ul>
+                <li><strong>Manhattan Distance:</strong> <code>h(n) = |&Delta;r| + |&Delta;c|</code>. Optimal for standard 4-directional grid walkways where diagonal movement is constrained.</li>
+                <li><strong>Euclidean Distance:</strong> <code>h(n) = &radic;((&Delta;r)&sup2; + (&Delta;c)&sup2;)</code>. Straight-line distance; provides smooth, direct vector orientation.</li>
+                <li><strong>Octile Distance:</strong> <code>h(n) = &Delta;r + &Delta;c + (&radic;2 - 2)&middot;min(&Delta;r, &Delta;c)</code>. The ideal admissible heuristic when 8-directional diagonal movement is enabled.</li>
+              </ul>
+            </div>
           </section>
 
           <section className="guide-section">
-            <h4><Compass size={18} className="section-icon" /> 3. Breadth-First Search (BFS)</h4>
+            <h4><ShieldCheck size={18} className="section-icon" /> 4. Real-Time Dynamic Replanning</h4>
             <p>
-              BFS explores the graph layer by layer using a First-In, First-Out (FIFO) queue. It guarantees the minimum number of step hops on <strong>unweighted</strong> graphs.
+              In real-world university campuses, unexpected obstacles (construction roadblocks, delivery carts, crowds) suddenly appear.
             </p>
             <p>
-              <strong>Limitation:</strong> BFS is blind to terrain costs. On a campus with steep stairwells (cost: 7) and open paved roads (cost: 1), BFS might choose the stairs because it has the same number of tile steps!
-            </p>
-          </section>
-
-          <section className="guide-section">
-            <h4><Cpu size={18} className="section-icon" /> 4. Greedy Best-First Search</h4>
-            <p>
-              Greedy evaluates nodes using only <code>f(n) = h(n)</code>, completely ignoring the distance already traveled.
-            </p>
-            <p>
-              <strong>Trap:</strong> It charges directly towards the destination. When faced with large campus buildings or dead ends, it easily gets trapped and yields suboptimal, convoluted paths.
-            </p>
-          </section>
-
-          <section className="guide-section">
-            <h4><ShieldCheck size={18} className="section-icon" /> 5. Dynamic Replanning (D* / Dynamic A*)</h4>
-            <p>
-              In production autonomous vehicles, unforeseen obstacles (construction, crowds, delivery trucks) frequently block paths.
-              In this simulator, clicking <strong>"Inject Sudden Roadblock"</strong> simulates unexpected sensor detection, immediately halting the rover and recalculating an alternate optimal route from its current position!
+              This simulator equips the rover with simulated 360&deg; LiDAR sensors. Clicking <strong>"Inject Sudden Roadblock"</strong> simulates an unexpected obstacle detection: the rover instantly halts, marks the blockage, and recalculates an alternate optimal A* trajectory on the fly!
             </p>
           </section>
         </div>

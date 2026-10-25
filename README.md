@@ -6,13 +6,11 @@ An interactive, high-fidelity AI Pathfinding Simulator modeled for autonomous ca
 
 ## 🌟 Features
 
-- **Multi-Algorithm Engine**:
-  - **A\* Search** (Manhattan, Euclidean, Octile heuristics with dynamic tie-breaking)
-  - **Dijkstra's Algorithm** (Uniform-cost guarantees)
-  - **Breadth-First Search (BFS)** (Unweighted shortest hop count)
-  - **Depth-First Search (DFS)** (Exhaustive exploration)
-  - **Greedy Best-First Search** (Heuristic-driven speed)
-  - **Bidirectional A\*** (Simultaneous frontier convergence)
+- **Core A\* Search Engine**:
+  - Evaluates **f(n) = g(n) + h(n)** in real-time with mathematical guarantees of shortest-path optimality.
+  - **Multiple Admissible Heuristics**: Manhattan Distance (|Δr| + |Δc|), Euclidean Straight-Line, and Octile 8-Directional Diagonal metric.
+  - **A\* Heuristics Benchmark**: Side-by-side performance matrix comparing heuristic exploration space vs. uniform-cost baseline.
+  - **Dynamic A\* Replanning**: Real-time obstacle avoidance when new roadblocks appear during rover traversal.
 - **Live Campus Blueprint**:
   - Modeled university buildings (AI Research Lab, Student Union, Tech Incubator, Robotics Foundry, Central Library, Quantum Computing Center, Cafeteria, etc.)
   - Interactive doors, campus terrain weights (Paved paths, Grass/Mud mud-traps, Heavy Traffic corridors)
